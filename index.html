@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evliliğe Evet — Tek Form, Tüm Firmalar Ayağınıza Gelsin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <img src="img/logo.png" alt="Evliliğe Evet" class="logo-img">
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>Tek Form Doldurun,<br>Firmalar Size Ulaşsın</h1>
+      <p>Düğününüz için ihtiyacınız olan hizmetleri ve bütçenizi seçin, size en yakın firmalara tek tıkla ulaşın.</p>
+    </section>
+
+    <section class="form-card" id="formCard">
+
+      <div class="field">
+        <label>Adınız Soyadınız</label>
+        <input type="text" id="fullName" placeholder="Ad Soyad">
+      </div>
+
+      <div class="field">
+        <label>Telefon Numaranız</label>
+        <input type="text" id="phone" placeholder="05XX XXX XX XX">
+      </div>
+
+      <div class="field">
+        <label>Düğün Mekanı</label>
+        <div class="cat-list" id="catListMekan">
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="mekan_kir"><span>Kır Düğünü</span></label>
+            <input type="text" class="budget-input" id="budget-mekan_kir" placeholder="Bütçeniz (örn. 120.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="mekan_salon"><span>Düğün Salonu</span></label>
+            <input type="text" class="budget-input" id="budget-mekan_salon" placeholder="Bütçeniz (örn. 150.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="mekan_tarihi"><span>Tarihi Mekan</span></label>
+            <input type="text" class="budget-input" id="budget-mekan_tarihi" placeholder="Bütçeniz (örn. 200.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="mekan_sosyal"><span>Sosyal Tesis</span></label>
+            <input type="text" class="budget-input" id="budget-mekan_sosyal" placeholder="Bütçeniz (örn. 100.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="mekan_otel"><span>Otel Düğünü</span></label>
+            <input type="text" class="budget-input" id="budget-mekan_otel" placeholder="Bütçeniz (örn. 250.000 TL)" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Diğer Hizmetler</label>
+        <div class="cat-list" id="catListDiger">
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="gelinlik" checked><span>Gelinlikçi</span></label>
+            <input type="text" class="budget-input" id="budget-gelinlik" placeholder="Bütçeniz (örn. 20.000 TL)">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="makyaj" checked><span>Gelin Saçı &amp; Makyajı</span></label>
+            <input type="text" class="budget-input" id="budget-makyaj" placeholder="Bütçeniz (örn. 8.000 TL)">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="fotograf"><span>Düğün Fotoğrafçısı</span></label>
+            <input type="text" class="budget-input" id="budget-fotograf" placeholder="Bütçeniz (örn. 30.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="teklif"><span>Evlilik Teklifi</span></label>
+            <input type="text" class="budget-input" id="budget-teklif" placeholder="Bütçeniz (örn. 10.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="gelinArabasi"><span>Gelin Arabası</span></label>
+            <input type="text" class="budget-input" id="budget-gelinArabasi" placeholder="Bütçeniz (örn. 5.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="muzik"><span>Müzik</span></label>
+            <input type="text" class="budget-input" id="budget-muzik" placeholder="Bütçeniz (örn. 25.000 TL)" style="display:none;">
+          </div>
+          <div class="cat-item">
+            <label class="check-row"><input type="checkbox" name="cat" value="dansKursu"><span>Dans Kursu</span></label>
+            <input type="text" class="budget-input" id="budget-dansKursu" placeholder="Bütçeniz (örn. 6.000 TL)" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Hangi ilçedesiniz?</label>
+        <select id="district">
+          <option value="">İlçenizi seçin</option>
+          <option>Çankaya</option>
+          <option>Keçiören</option>
+          <option>Yenimahalle</option>
+          <option>Etimesgut</option>
+          <option>Mamak</option>
+          <option>Sincan</option>
+          <option>Altındağ</option>
+          <option>Pursaklar</option>
+          <option>Gölbaşı</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Düğün tarihiniz (opsiyonel)</label>
+        <input type="date" id="weddingDate">
+      </div>
+
+      <button class="cta-btn" id="searchBtn">Uygun Firmaları Göster</button>
+    </section>
+
+    <section class="results" id="results" style="display:none;">
+      <div id="resultsList"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">Evliliğe Evet</footer>
+
+  <script src="js/firms-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
