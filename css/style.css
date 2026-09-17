@@ -68,11 +68,14 @@ select:focus, input[type="date"]:focus, input[type="text"]:focus{outline:none;bo
   font-family:'Playfair Display',serif;font-size:16.5px;font-weight:700;
   margin:0 0 12px;color:var(--text);
 }
+.cat-group-budget{
+  font-size:12.5px;color:var(--red);margin:-6px 0 14px;font-weight:600;
+}
 
 .firm-card{
   background:var(--panel);border:1px solid var(--line);border-radius:4px;
   padding:16px 18px;margin-bottom:10px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
 }
 .firm-info .firm-name{font-weight:700;font-size:15px;margin:0 0 4px;}
 .firm-info .firm-meta{font-size:12px;color:var(--text-dim);margin:0;letter-spacing:0.2px;}
@@ -83,6 +86,13 @@ select:focus, input[type="date"]:focus, input[type="text"]:focus{outline:none;bo
 }
 .social-btn:hover{color:var(--red);}
 .social-btn-disabled{opacity:0.25;cursor:not-allowed;pointer-events:none;}
+
+.firm-pricelist{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
+.price-row{
+  display:flex;justify-content:space-between;gap:16px;
+  font-size:12.5px;color:var(--text-dim);padding:2px 0;
+}
+.price-row span:last-child{color:var(--text);font-weight:600;white-space:nowrap;}
 .firm-whatsapp{
   background:#25D366;color:#fff;text-decoration:none;border-radius:2px;
   padding:9px 16px;font-size:12.5px;font-weight:600;white-space:nowrap;
