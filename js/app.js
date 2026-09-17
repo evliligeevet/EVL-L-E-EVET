@@ -36,12 +36,14 @@ function distanceKm(a, b) {
 
 function buildMessage(name, phone, cat, district, date) {
   const budget = document.getElementById('budget-' + cat).value.trim();
-  let msg = `Size Evliliğe Evet aracılığıyla ulaşıyorum. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
-  if (budget) msg += ` Bütçem: ${budget}.`;
+  let msg = `Merhaba, size evliligeevet.com üzerinden ulaşıyorum. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
+  if (budget) msg += ` Tahmini bütçem ${budget} aralığındadır.`;
+  msg += ` Onayladığınız takdirde sizinle iletişime geçmek isteriz, sizin de teklifinizi bekliyoruz.`;
   if (district) msg += ` İlçe: ${district}.`;
   if (date) msg += ` Düğün tarihim: ${date}.`;
   if (name) msg += ` Adım: ${name}.`;
   if (phone) msg += ` Telefon: ${phone}.`;
+  msg += ` Teşekkürler.`;
   return encodeURIComponent(msg);
 }
 
@@ -81,6 +83,14 @@ searchBtn.addEventListener('click', () => {
       : `${CAT_LABELS[cat]} — Henüz Firma Yok`;
     group.appendChild(title);
 
+    const enteredBudget = document.getElementById('budget-' + cat).value.trim();
+    if (enteredBudget) {
+      const budgetLine = document.createElement('p');
+      budgetLine.className = 'cat-group-budget';
+      budgetLine.textContent = `Bütçeniz: ${enteredBudget}`;
+      group.appendChild(budgetLine);
+    }
+
     if (matches.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'empty-state';
@@ -102,6 +112,10 @@ searchBtn.addEventListener('click', () => {
           return `<span class="social-btn social-btn-disabled" title="${s.title} bağlantısı yok">${s.svg}</span>`;
         }).join('');
 
+        const priceListHtml = (firm.priceList && firm.priceList.length > 0)
+          ? `<div class="firm-pricelist">${firm.priceList.map(p => `<div class="price-row"><span>${p.item}</span><span>${p.price}</span></div>`).join('')}</div>`
+          : '';
+
         const card = document.createElement('div');
         card.className = 'firm-card';
         card.innerHTML = `
@@ -109,6 +123,7 @@ searchBtn.addEventListener('click', () => {
             <p class="firm-name">${firm.name}</p>
             <p class="firm-meta">${firm.district} · ${firm.dist.toFixed(1)} km</p>
             <div class="firm-social">${socialLinks}</div>
+            ${priceListHtml}
           </div>
           <a class="firm-whatsapp" href="https://wa.me/${firm.whatsapp}?text=${waMsg}" target="_blank">WhatsApp'tan Ulaş</a>
         `;
