@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evliliğe Evet — İlk Evet Dediğiniz An</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="muhur.html" class="muhur-badge" title="Evliliğe Evet Mührü">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21"/></svg>
+      <span>Mühür</span>
+    </a>
+
+    <div class="topbar-center">
+      <img src="img/logo.png" alt="Evliliğe Evet" class="logo-img">
+      <p class="tagline">İlk Evet Dediğiniz An</p>
+    </div>
+
+    <a href="http://evliligeevetisortagim.site/" target="_blank" class="firma-giris-btn">Firma Girişi</a>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>Evliliğe Evet Demek İçin<br>Asistanınıza Sorun</h1>
+      <p>Yazmaya başlayın, size en yakın firmaları bulalım.</p>
+    </section>
+
+    <section class="form-card" id="formCard">
+
+      <div class="field">
+        <label>Ne arıyorsunuz?</label>
+        <input type="text" id="searchInput" placeholder="Örn: gelinlik, nikah, makyaj..." autocomplete="off">
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+
+      <div class="field" id="selectedField" style="display:none;">
+        <label>Seçtikleriniz</label>
+        <div id="selectedChips" class="selected-chips"></div>
+      </div>
+
+      <div id="budgetFields"></div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Adınız Soyadınız</label>
+          <input type="text" id="fullName" placeholder="Ad Soyad">
+        </div>
+        <div class="field">
+          <label>Telefon Numaranız</label>
+          <input type="text" id="phone" placeholder="05XX XXX XX XX">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label-emphasis">Hangi ilçedesiniz?</label>
+        <select id="district">
+          <option value="">İlçenizi seçin</option>
+          <option>Çankaya</option>
+          <option>Keçiören</option>
+          <option>Yenimahalle</option>
+          <option>Etimesgut</option>
+          <option>Mamak</option>
+          <option>Sincan</option>
+          <option>Altındağ</option>
+          <option>Pursaklar</option>
+          <option>Gölbaşı</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Düğün tarihiniz (opsiyonel)</label>
+        <input type="date" id="weddingDate">
+      </div>
+
+      <button class="cta-btn" id="searchBtn">Uygun Firmaları Göster</button>
+    </section>
+
+    <section class="results" id="results" style="display:none;">
+      <div id="resultsList"></div>
+    </section>
+
+    <section class="about-strip">
+      <h2>Neden Evliliğe Evet?</h2>
+      <div class="about-grid">
+        <div class="about-item">
+          <span class="about-num">01</span>
+          <p><strong>Sadece o an.</strong> Mekan, çiçek, kalabalık listeler değil — teklif, nikah, gelinlik, damatlık, saç & makyaj, fotoğraf. Sadece "evet" dediğiniz anın bir parçası.</p>
+        </div>
+        <div class="about-item">
+          <span class="about-num">02</span>
+          <p><strong>Size en yakın.</strong> Tek form doldurursunuz, gerçek mesafeye göre size en yakın firmalar önünüze gelir — onlarca değil, sadece en yakın birkaçı.</p>
+        </div>
+        <div class="about-item">
+          <span class="about-num">03</span>
+          <p><strong>Doğrudan konuşun.</strong> Aracı yok, spam yok. Beğendiğiniz firmayla tek tıkla, kendi WhatsApp'ınızdan konuşursunuz.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">Evliliğe Evet</footer>
+
+  <script src="js/firms-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
