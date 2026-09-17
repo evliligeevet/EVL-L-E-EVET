@@ -37,7 +37,7 @@ function distanceKm(a, b) {
 
 function buildMessage(name, phone, cat, district, date) {
   const budget = document.getElementById('budget-' + cat).value.trim();
-  let msg = `Merhaba, ben ${name || "bir müşteriniz"}. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
+  let msg = `Size Evliliğe Evet aracılığıyla ulaşıyorum. Ben ${name || "bir müşteriniz"}. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
   if (budget) msg += ` Bütçem: ${budget}.`;
   if (district) msg += ` İlçe: ${district}.`;
   if (date) msg += ` Düğün tarihim: ${date}.`;
