@@ -41,8 +41,8 @@ const FIRMS = [
     instagram: "https://www.instagram.com/setrinurankaraetimesgut/"
   },
 
-  // Yeni firma eklerken bu formatta ekle (instagram/youtube/website OPSİYONEL,
-  // sadece elinde olanları ekle, olmayanları hiç yazma):
+  // Yeni firma eklerken bu formatta ekle (instagram/youtube/website/priceList
+  // OPSİYONEL, sadece elinde olanları ekle, olmayanları hiç yazma):
   // {
   //   name: "Firma Adı",
   //   whatsapp: "905XXXXXXXXX",
@@ -50,7 +50,12 @@ const FIRMS = [
   //   categories: ["mekan_salon", "gelinlik", "muzik"],
   //   instagram: "https://instagram.com/kullaniciadi",
   //   youtube: "https://youtube.com/@kanaladi",
-  //   website: "https://firmasitesi.com"
+  //   website: "https://firmasitesi.com",
+  //   priceList: [
+  //     { item: "1 Kişi Et Menü", price: "3.000 TL" },
+  //     { item: "1 Kişi Tavuk Menü", price: "2.000 TL" },
+  //     { item: "1 Kişi Kokteyl", price: "500 TL" }
+  //   ]
   // },
 ];
 
