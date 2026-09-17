@@ -10,13 +10,15 @@ const FIRMS = [
     name: "Botanik Gardens",
     whatsapp: "905323769208",
     district: "Gölbaşı",
-    categories: ["mekan_kir"]
+    categories: ["mekan_kir"],
+    instagram: "https://www.instagram.com/botanikgardens/"
   },
   {
     name: "Botanik Loca",
     whatsapp: "905323769208",
     district: "Gölbaşı",
-    categories: ["mekan_kir"]
+    categories: ["mekan_kir"],
+    instagram: "https://www.instagram.com/botanikloca/"
   },
   {
     name: "Lavessa İncek Event",
@@ -28,21 +30,27 @@ const FIRMS = [
     name: "Setr-i Nur Etimesgut",
     whatsapp: "908503773127",
     district: "Etimesgut",
-    categories: ["gelinlik"]
+    categories: ["gelinlik"],
+    instagram: "https://www.instagram.com/setrinurankaraetimesgut/"
   },
   {
     name: "Setr-i Nur Makeup",
     whatsapp: "908503773127",
     district: "Etimesgut",
-    categories: ["makyaj"]
+    categories: ["makyaj"],
+    instagram: "https://www.instagram.com/setrinurankaraetimesgut/"
   },
 
-  // Yeni firma eklerken bu formatta ekle:
+  // Yeni firma eklerken bu formatta ekle (instagram/youtube/website OPSİYONEL,
+  // sadece elinde olanları ekle, olmayanları hiç yazma):
   // {
   //   name: "Firma Adı",
   //   whatsapp: "905XXXXXXXXX",
   //   district: "İlçe Adı",
-  //   categories: ["mekan_salon", "gelinlik", "muzik"]
+  //   categories: ["mekan_salon", "gelinlik", "muzik"],
+  //   instagram: "https://instagram.com/kullaniciadi",
+  //   youtube: "https://youtube.com/@kanaladi",
+  //   website: "https://firmasitesi.com"
   // },
 ];
 
