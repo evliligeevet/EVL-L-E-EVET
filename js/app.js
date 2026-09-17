@@ -25,7 +25,6 @@ function formatDate(isoDate) {
   return `${d}.${m}.${y}`;
 }
 
-// Haversine — iki koordinat arası kuş uçuşu mesafe (km)
 function distanceKm(a, b) {
   const R = 6371;
   const dLat = (b.lat - a.lat) * Math.PI / 180;
@@ -37,11 +36,12 @@ function distanceKm(a, b) {
 
 function buildMessage(name, phone, cat, district, date) {
   const budget = document.getElementById('budget-' + cat).value.trim();
-  let msg = `Size Evliliğe Evet aracılığıyla ulaşıyorum. Ben ${name || "bir müşteriniz"}. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
+  let msg = `Size Evliliğe Evet aracılığıyla ulaşıyorum. ${CAT_LABELS[cat]} hizmeti için bilgi almak istiyorum.`;
   if (budget) msg += ` Bütçem: ${budget}.`;
   if (district) msg += ` İlçe: ${district}.`;
   if (date) msg += ` Düğün tarihim: ${date}.`;
-  if (phone) msg += ` Bana ${phone} numaralı telefondan da ulaşabilirsiniz.`;
+  if (name) msg += ` Adım: ${name}.`;
+  if (phone) msg += ` Telefon: ${phone}.`;
   return encodeURIComponent(msg);
 }
 
@@ -65,7 +65,6 @@ searchBtn.addEventListener('click', () => {
   resultsList.innerHTML = "";
 
   selectedCats.forEach(cat => {
-    // Bu kategoriyi veren firmaları bul, mesafeye göre sırala, en yakın 3'ü al
     let matches = FIRMS.filter(f => f.categories.includes(cat));
     matches = matches.map(f => {
       const fCoord = DISTRICT_COORDS[f.district] || userCoord;
@@ -90,12 +89,19 @@ searchBtn.addEventListener('click', () => {
     } else {
       matches.forEach(firm => {
         const waMsg = buildMessage(name, phone, cat, districtName, date);
+
+        let socialLinks = '';
+        if (firm.instagram) socialLinks += `<a class="social-btn" href="${firm.instagram}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>`;
+        if (firm.youtube) socialLinks += `<a class="social-btn" href="${firm.youtube}" target="_blank" title="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></a>`;
+        if (firm.website) socialLinks += `<a class="social-btn" href="${firm.website}" target="_blank" title="Web Sitesi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></a>`;
+
         const card = document.createElement('div');
         card.className = 'firm-card';
         card.innerHTML = `
           <div class="firm-info">
             <p class="firm-name">${firm.name}</p>
             <p class="firm-meta">${firm.district} · ${firm.dist.toFixed(1)} km</p>
+            ${socialLinks ? `<div class="firm-social">${socialLinks}</div>` : ''}
           </div>
           <a class="firm-whatsapp" href="https://wa.me/${firm.whatsapp}?text=${waMsg}" target="_blank">WhatsApp'tan Ulaş</a>
         `;
