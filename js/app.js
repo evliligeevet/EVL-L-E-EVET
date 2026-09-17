@@ -90,10 +90,17 @@ searchBtn.addEventListener('click', () => {
       matches.forEach(firm => {
         const waMsg = buildMessage(name, phone, cat, districtName, date);
 
-        let socialLinks = '';
-        if (firm.instagram) socialLinks += `<a class="social-btn" href="${firm.instagram}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>`;
-        if (firm.youtube) socialLinks += `<a class="social-btn" href="${firm.youtube}" target="_blank" title="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></a>`;
-        if (firm.website) socialLinks += `<a class="social-btn" href="${firm.website}" target="_blank" title="Web Sitesi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></a>`;
+        const socialIcons = [
+          { key: 'instagram', title: 'Instagram', svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>` },
+          { key: 'youtube', title: 'YouTube', svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>` },
+          { key: 'website', title: 'Web Sitesi', svg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>` }
+        ];
+        const socialLinks = socialIcons.map(s => {
+          if (firm[s.key]) {
+            return `<a class="social-btn" href="${firm[s.key]}" target="_blank" title="${s.title}">${s.svg}</a>`;
+          }
+          return `<span class="social-btn social-btn-disabled" title="${s.title} bağlantısı yok">${s.svg}</span>`;
+        }).join('');
 
         const card = document.createElement('div');
         card.className = 'firm-card';
@@ -101,7 +108,7 @@ searchBtn.addEventListener('click', () => {
           <div class="firm-info">
             <p class="firm-name">${firm.name}</p>
             <p class="firm-meta">${firm.district} · ${firm.dist.toFixed(1)} km</p>
-            ${socialLinks ? `<div class="firm-social">${socialLinks}</div>` : ''}
+            <div class="firm-social">${socialLinks}</div>
           </div>
           <a class="firm-whatsapp" href="https://wa.me/${firm.whatsapp}?text=${waMsg}" target="_blank">WhatsApp'tan Ulaş</a>
         `;
