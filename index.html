@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evliliğe Evet · Çok yakında</title>
+<meta name="description" content="Evliliğe Evet çok yakında. Düğününüz için doğru firmaları tek yerde bulacağınız sistemi hazırlıyoruz.">
+<meta name="theme-color" content="#4A1F2B">
+<style>
+  :root{
+    --bg:#FBF6F1;
+    --ink:#3B1722;
+    --muted:#7A5A63;
+    --accent:#A8324E;
+    --line:#E6D3CB;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+  }
+  main{max-width:560px;width:100%}
+  .ring{
+    width:84px;height:84px;margin:0 auto 28px;
+    border:2px solid var(--accent);
+    border-radius:50%;
+    position:relative;
+  }
+  .ring::after{
+    content:"";position:absolute;inset:14px;
+    border:2px solid var(--line);border-radius:50%;
+  }
+  h1{
+    margin:0;
+    font-size:clamp(40px,10vw,64px);
+    line-height:1.05;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .tag{
+    margin:10px 0 0;
+    font-size:clamp(16px,4vw,19px);
+    color:var(--muted);
+    font-style:italic;
+  }
+  hr{
+    width:64px;border:0;border-top:2px solid var(--accent);
+    margin:32px auto;
+  }
+  .soon{
+    margin:0;
+    font-size:clamp(26px,7vw,36px);
+    color:var(--accent);
+    font-weight:700;
+  }
+  p.lead{
+    margin:16px auto 0;
+    max-width:420px;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    color:var(--muted);
+  }
+  footer{
+    margin-top:48px;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:13px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="ring" aria-hidden="true"></div>
+  <h1>Evliliğe Evet</h1>
+  <p class="tag">İlk evet dediğiniz an</p>
+  <hr>
+  <p class="soon">Çok yakında</p>
+  <p class="lead">Düğününüz için doğru firmaları tek yerde bulabileceğiniz yeni sistemimizi hazırlıyoruz.</p>
+  <!-- İletişim / Instagram bağlantısı eklemek için buraya bir satır eklenebilir -->
+  <footer>&copy; 2026 Evliliğe Evet</footer>
+</main>
+</body>
+</html>
