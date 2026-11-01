@@ -1,0 +1,18 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Yönetim | Evliliğe Evet</title><link rel="icon" href="img/icon.png"><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="ad"><img src="img/logo-red.png" alt="Evliliğe Evet" style="height:34px;margin-bottom:20px">
+<div id="girisK" class="box" style="max-width:430px"><h1 style="font-size:30px;margin-bottom:14px">Yönetim girişi</h1>
+<div class="fm" style="grid-template-columns:1fr"><div class="f"><label for="em">E-posta</label><input id="em" type="email" autocomplete="username"></div>
+<div class="f"><label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password"></div></div>
+<button class="btn" id="giris" type="button" style="margin-top:16px">Giriş yap</button><p class="msg err" id="gmsg" style="margin-top:10px"></p></div>
+<div id="panelK" style="display:none">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h1>Liste yönetimi</h1><button class="btn o sm" id="cikis" type="button">Çıkış</button></div>
+<p style="color:var(--mut);margin:8px 0 18px">Maddeleri buradan ekleyin, düzeltin ya da gizleyin. Kaydettiğiniz anda sitede görünür.</p>
+<div class="tabs" id="kt"></div><p class="msg" id="msg"></p>
+<div class="box"><h3 style="font-size:22px;margin-bottom:10px">Yeni madde ekle</h3><div class="row" style="border:0;padding:0"><div><label>Başlık</label><input id="nb" placeholder="Örn: Gelin bukesini sipariş edin"></div><div id="nhw"><label>Hafta</label><input id="nh" type="number" value="-4"></div><div><label>Sıra</label><input id="ns" type="number" value="100"></div>
+<div class="w"><label>Açıklama</label><textarea id="na"></textarea></div><div class="acts"><button class="btn sm" id="ekle" type="button">Ekle</button><span style="font-size:13px;color:var(--mut)">Hafta: düğünden kaç hafta önce (eksi) ya da sonra (artı) önerilir. Örn: -4 = 4 hafta kala.</span></div></div></div>
+<div id="satir"></div>
+<div class="box"><h3 style="font-size:22px;margin-bottom:10px">Kategori işlemleri</h3><div class="row" style="border:0;padding:0;grid-template-columns:1fr 1fr 90px"><div><label>Yeni kategori adı</label><input id="kad" placeholder="Örn: Balayı"></div><div><label>Tür</label><select id="ktur"><option value="liste">Yol haritası listesi</option><option value="rehber">Evlilik sonrası rehber</option></select></div><div><label>Sıra</label><input id="ksira" type="number" value="50"></div>
+<div class="acts"><button class="btn sm" id="kekle" type="button">Kategori ekle</button><button class="btn sm del" id="ksil" type="button">Seçili kategoriyi sil</button></div></div></div>
+</div></div>
+<script src="js/config.js"></script><script src="js/admin.js"></script></body></html>

@@ -109,3 +109,15 @@ footer small{display:block;margin-top:26px;color:#8da09b}
  body *{visibility:hidden}.paper,.paper *{visibility:visible}
  .paper{position:absolute;left:0;top:0;width:100%;border:0;box-shadow:none;padding:0}
 }
+/* yönetim paneli */
+.ad{max-width:980px;margin:0 auto;padding:30px 20px 80px}
+.ad h1{font-size:40px}.ad .row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;display:grid;grid-template-columns:1fr 90px 90px;gap:10px}
+.ad .row .w{grid-column:1/-1}.ad .row.off{opacity:.55}
+.ad input,.ad textarea,.ad select{padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font:15px "AR",sans-serif;width:100%;background:#fff;color:var(--ink)}
+.ad textarea{min-height:60px;resize:vertical}
+.ad label{font-size:12.5px;font-weight:600;color:var(--teal);display:block;margin-bottom:3px}
+.ad .acts{grid-column:1/-1;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ad .msg{font-size:14px;color:var(--teal);min-height:20px}.ad .err{color:#B3122B}
+.ad .box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;margin:20px 0}
+.ad .del{background:none;border:2px solid #B3122B;color:#B3122B}.ad .del:hover{background:#fbe5e8}
+@media(max-width:600px){.ad .row{grid-template-columns:1fr 1fr}.ad .row>div:first-child{grid-column:1/-1}}

@@ -65,3 +65,13 @@ window.LISTE=[
 ["s5","Hediyeleri ve takıları kaydedin","Kimden ne geldiğini yazın.",3],
 ["s6","Ortak hesap ve bütçe düzenini kurun","Aylık bütçe, tasarruf hedefi ve ortak giderler.",4]]}
 ];
+
+window.REHBER=[
+["s_a","Nüfus müdürlüğü","Kimlik bilgilerinizin güncellenmesi için ilgili birime başvurun. Yeni kimlik gerekip gerekmediğini orada öğrenin."],
+["s_b","Pasaport","Pasaportunuz varsa isim değişikliği için başvuru yapın."],
+["s_c","Ehliyet","Sürücü belgesi bilgilerinizin güncellenmesini sorun."],
+["s_d","Bankalar ve kredi kartları","Bankanıza isim ve kimlik güncellemesi için başvurun. Kartların yenilenmesi gerekebilir."],
+["s_e","e-Devlet, SGK ve işyeri","e-Devlet bilgilerinizi kontrol edin, işyerinize güncel bilgi verin."],
+["s_f","Tapu, araç ruhsatı ve sigortalar","Adınıza kayıtlı tapu, araç ve sigorta kayıtlarını güncelletin."],
+["s_g","Telefon, internet ve abonelikler","Fatura sahibi bilgilerinizi ve adres değişikliğini bildirin."],
+["s_h","Diğer üyelikler ve kartlar","Okul, kütüphane, spor salonu, alışveriş kartı ve benzeri üyeliklerinizi kontrol edin."]];

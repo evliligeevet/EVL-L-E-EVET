@@ -21,7 +21,7 @@ function wk(w){var n=Math.abs(w);var t;if(w===0)return"Düğün günü";if(n>=8&
 
 /* yol haritası */
 var pg=document.body.getAttribute("data-page");
-if(pg==="yol"){
+function initYol(){
  var cur=(location.hash||"").replace("#","")||S.tab||"nikah";
  if(!window.LISTE.some(function(x){return x.id===cur}))cur="nikah";
  var tb=$("#tabs"),ls=$("#liste"),di=$("#tarih");
@@ -59,11 +59,19 @@ if(pg==="yol"){
  draw();
 }
 
+if(pg==="yol")window.listeYukle(initYol);
+
 /* evlilik sonrası */
-if(pg==="sonra"){
- $$("[data-sid]").forEach(function(e){var id=e.dataset.sid,b=$(".ck",e);
+function initSonra(){
+ var c=$("#rehber");c.innerHTML="";
+ window.REHBER.forEach(function(o){
+  var e=document.createElement("div");e.className="it";
+  e.innerHTML='<button class="ck" aria-label="İşaretle"></button><div class="tx"><b></b><span></span></div>';
+  $("b",e).textContent=o[1];$("span",e).textContent=o[2];
+  var b=$(".ck",e),id=o[0];
   function r(){var d=!!S.done[id];e.classList.toggle("d",d);b.textContent=d?"✓":""}
-  b.addEventListener("click",function(){S.done[id]=!S.done[id];sv(S);r()});r()})}
+  b.addEventListener("click",function(){S.done[id]=!S.done[id];sv(S);r()});r();c.appendChild(e)})}
+if(pg==="sonra")window.listeYukle(initSonra);
 
 /* dilekçe */
 if(pg==="dilekce"){
