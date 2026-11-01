@@ -1,224 +1,80 @@
-// ============================================================================
-// Evliliğe Evet — Arama Tabanlı Eşleştirme Motoru (Armut.com mantığı)
-// ============================================================================
+(function(){
+var K="ee_v1";
+function ld(){try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return{}}}
+function sv(s){try{localStorage.setItem(K,JSON.stringify(s))}catch(e){}}
+var S=ld(); S.done=S.done||{};
+var $=function(q,r){return (r||document).querySelector(q)};
+var $$=function(q,r){return Array.prototype.slice.call((r||document).querySelectorAll(q))};
+var A=window.AYAR||{};
 
-const searchInput = document.getElementById('searchInput');
-const suggestionsBox = document.getElementById('suggestions');
-const selectedField = document.getElementById('selectedField');
-const selectedChips = document.getElementById('selectedChips');
-const budgetFields = document.getElementById('budgetFields');
-const searchBtn = document.getElementById('searchBtn');
-const resultsSection = document.getElementById('results');
-const resultsList = document.getElementById('resultsList');
+/* menü */
+var bg=$(".burger"),nv=$("nav.m");
+if(bg){bg.addEventListener("click",function(){var o=nv.classList.toggle("open");bg.setAttribute("aria-expanded",o)})}
+$$("[data-fiyat]").forEach(function(e){e.textContent=A.PRO_FIYAT||""});
+$$("[data-ep]").forEach(function(e){if(!A.EPOSTA)e.style.display="none";else e.href="mailto:"+A.EPOSTA+"?subject="+encodeURIComponent("Evliliğe Evet Pro ön kayıt")});
+$$("[data-wa]").forEach(function(e){if(!A.WHATSAPP)e.style.display="none";else e.href="https://wa.me/"+A.WHATSAPP+"?text="+encodeURIComponent("Merhaba, Evliliğe Evet Pro için ön kayıt yaptırmak istiyorum.")});
+if(!A.EPOSTA&&!A.WHATSAPP){$$("[data-onkayit]").forEach(function(e){e.style.display="none"});$$("[data-yakinda]").forEach(function(e){e.style.display="block"})}
 
-const CAT_LABELS = {
-  mekan_kir: "Kır Düğünü", mekan_salon: "Düğün Salonu", mekan_tarihi: "Tarihi Mekan",
-  mekan_sosyal: "Sosyal Tesis", mekan_otel: "Otel Düğünü",
-  gelinlik: "Gelinlikçi", makyaj: "Gelin Saçı & Makyajı", fotograf: "Fotoğrafçı",
-  teklif: "Evlilik Teklifi", damatlik: "Damatlık", abiye: "Abiye & Nişanlık",
-  dans: "Dans Kursu / Gösterisi", muzik: "Müzik", cicek: "Çiçekçi",
-  pasta: "Düğün Pastası", davetiye: "Davetiye", kina: "Kına Organizasyonu",
-  hediyelik: "Nikah Şekeri & Hediyelik", gelinArabasi: "Gelin Arabası",
-  catering: "Catering / İkram", organizasyon: "Düğün Organizasyonu",
-  alyans: "Alyans & Takı", ayakkabi: "Ayakkabı & Aksesuar"
-};
+function gun(d){var a=new Date();a.setHours(0,0,0,0);var b=new Date(d+"T00:00:00");return Math.round((b-a)/86400000)}
+function fmt(d){return new Date(d+"T00:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"})}
+function wk(w){var n=Math.abs(w);var t;if(w===0)return"Düğün günü";if(n>=8&&n%4===0)t=(n/4)+" ay";else if(n>=8)t=Math.round(n/4.345)+" ay";else t=n+" hafta";return t+(w<0?" kala":" sonra")}
 
-let selectedCats = new Set();
-
-// ---------------------------------------------------------------------------
-// Arama kutusu: yazdıkça öneri göster
-// ---------------------------------------------------------------------------
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLocaleLowerCase('tr');
-  suggestionsBox.innerHTML = "";
-  if (!q) { suggestionsBox.style.display = 'none'; return; }
-
-  const matches = SEARCH_INDEX.filter(s => s.keyword.includes(q)).slice(0, 6);
-  if (matches.length === 0) {
-    suggestionsBox.innerHTML = `<div class="suggestion-empty">Eşleşme bulunamadı — yakında eklenebilir.</div>`;
-    suggestionsBox.style.display = 'block';
-    return;
-  }
-
-  matches.forEach(m => {
-    const item = document.createElement('div');
-    item.className = 'suggestion-item';
-    item.textContent = m.label;
-    item.addEventListener('click', () => selectSuggestion(m));
-    suggestionsBox.appendChild(item);
-  });
-  suggestionsBox.style.display = 'block';
-});
-
-function selectSuggestion(entry) {
-  entry.categories.forEach(c => selectedCats.add(c));
-  searchInput.value = "";
-  suggestionsBox.innerHTML = "";
-  suggestionsBox.style.display = 'none';
-  renderSelected();
+/* yol haritası */
+var pg=document.body.getAttribute("data-page");
+if(pg==="yol"){
+ var cur=(location.hash||"").replace("#","")||S.tab||"nikah";
+ if(!window.LISTE.some(function(x){return x.id===cur}))cur="nikah";
+ var tb=$("#tabs"),ls=$("#liste"),di=$("#tarih");
+ window.LISTE.forEach(function(k){var b=document.createElement("button");b.className="tab";b.textContent=k.ad;b.dataset.id=k.id;b.addEventListener("click",function(){cur=k.id;S.tab=cur;sv(S);draw()});tb.appendChild(b)});
+ if(S.date)di.value=S.date;
+ di.addEventListener("change",function(){S.date=di.value;sv(S);draw()});
+ function tot(){var n=0,d=0;window.LISTE.forEach(function(k){k.ogeler.forEach(function(o){n++;if(S.done[o[0]])d++})});return[d,n]}
+ function draw(){
+  $$(".tab").forEach(function(b){b.classList.toggle("on",b.dataset.id===cur)});
+  var k=window.LISTE.filter(function(x){return x.id===cur})[0];ls.innerHTML="";
+  k.ogeler.forEach(function(o){
+   var d=!!S.done[o[0]],el=document.createElement("div");el.className="it"+(d?" d":"");
+   var when=S.date?'<span class="chip g">'+wk(o[3])+'</span>':'';
+   el.innerHTML='<button class="ck" aria-label="İşaretle" aria-pressed="'+d+'">'+(d?"✓":"")+'</button><div class="tx"><b></b><span></span></div><div class="when">'+when+'</div>';
+   $("b",el).textContent=o[1];$("span",el).textContent=o[2];
+   $(".ck",el).addEventListener("click",function(){S.done[o[0]]=!S.done[o[0]];sv(S);draw()});
+   ls.appendChild(el)});
+  var t=tot(),p=t[1]?Math.round(t[0]*100/t[1]):0;
+  $("#pbar").style.width=p+"%";$("#ptxt").textContent="Hazırlıkların %"+p+"'i tamam ("+t[0]+"/"+t[1]+")";
+  if(S.date){var g=gun(S.date);$("#kalan").textContent=g>0?g+" gün":(g===0?"Bugün!":"Düğün tamam 🎉");$("#kalanalt").textContent=fmt(S.date)}else{$("#kalan").textContent="–";$("#kalanalt").textContent="Düğün tarihinizi girin"}
+ }
+ $("#icsbtn").addEventListener("click",function(){
+  if(!S.date){alert("Önce düğün tarihinizi girin.");return}
+  var base=new Date(S.date+"T09:00:00"),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Evliligeevet//TR","CALSCALE:GREGORIAN"],n=0,now=new Date();
+  function z(x){return String(x).padStart(2,"0")}
+  window.LISTE.forEach(function(k){k.ogeler.forEach(function(o){
+   if(S.done[o[0]])return;var d=new Date(base.getTime());d.setDate(d.getDate()+o[3]*7);
+   if(d<now)return;n++;
+   var st=d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+"T090000";
+   L.push("BEGIN:VEVENT","UID:ee-"+o[0]+"-"+S.date+"@evliligeevet","DTSTAMP:"+now.toISOString().replace(/[-:]/g,"").slice(0,15)+"Z","DTSTART:"+st,"DURATION:PT30M","SUMMARY:"+o[1].replace(/[,;]/g," "),"DESCRIPTION:"+o[2].replace(/[,;]/g," ")+" (Evliliğe Evet)","BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Hatırlatma","END:VALARM","END:VEVENT")})});
+  if(!n){alert("Takvime eklenecek yaklaşan madde kalmadı.");return}
+  L.push("END:VCALENDAR");
+  var bl=new Blob([L.join("\r\n")],{type:"text/calendar"}),a=document.createElement("a");a.href=URL.createObjectURL(bl);a.download="evlilik-hatirlatmalari.ics";document.body.appendChild(a);a.click();a.remove()});
+ $("#sifirla").addEventListener("click",function(){if(confirm("Tüm işaretler ve tarih silinsin mi?")){S={done:{}};sv(S);di.value="";draw()}});
+ draw();
 }
 
-function removeCategory(cat) {
-  selectedCats.delete(cat);
-  renderSelected();
-}
+/* evlilik sonrası */
+if(pg==="sonra"){
+ $$("[data-sid]").forEach(function(e){var id=e.dataset.sid,b=$(".ck",e);
+  function r(){var d=!!S.done[id];e.classList.toggle("d",d);b.textContent=d?"✓":""}
+  b.addEventListener("click",function(){S.done[id]=!S.done[id];sv(S);r()});r()})}
 
-function renderSelected() {
-  selectedChips.innerHTML = "";
-  budgetFields.innerHTML = "";
-
-  if (selectedCats.size === 0) {
-    selectedField.style.display = 'none';
-    return;
-  }
-  selectedField.style.display = 'block';
-
-  selectedCats.forEach(cat => {
-    const chip = document.createElement('span');
-    chip.className = 'chip';
-    chip.innerHTML = `${CAT_LABELS[cat] || cat} <button type="button" aria-label="Kaldır">&times;</button>`;
-    chip.querySelector('button').addEventListener('click', () => removeCategory(cat));
-    selectedChips.appendChild(chip);
-
-    const field = document.createElement('div');
-    field.className = 'field';
-    field.innerHTML = `
-      <label>${CAT_LABELS[cat] || cat} bütçeniz (opsiyonel)</label>
-      <input type="text" class="budget-input-flat" id="budget-${cat}" placeholder="Örn. 20.000 TL">
-    `;
-    budgetFields.appendChild(field);
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Tarih / mesafe / mesaj yardımcıları
-// ---------------------------------------------------------------------------
-function formatDate(isoDate) {
-  if (!isoDate) return "";
-  const [y, m, d] = isoDate.split("-");
-  return `${d}.${m}.${y}`;
-}
-
-function distanceKm(a, b) {
-  const R = 6371;
-  const dLat = (b.lat - a.lat) * Math.PI / 180;
-  const dLng = (b.lng - a.lng) * Math.PI / 180;
-  const lat1 = a.lat * Math.PI / 180, lat2 = b.lat * Math.PI / 180;
-  const h = Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
-  return R * 2 * Math.asin(Math.sqrt(h));
-}
-
-function getBudgetValue(cat) {
-  const el = document.getElementById('budget-' + cat);
-  return el ? el.value.trim() : "";
-}
-
-function buildMessage(name, phone, cat, district, date) {
-  const budget = getBudgetValue(cat);
-  let msg = `Merhaba, size evliligeevet.com üzerinden ulaşıyorum. ${CAT_LABELS[cat] || cat} hizmeti için bilgi almak istiyorum.`;
-  if (budget) {
-    msg += ` Tahmini bütçem ${budget} aralığındadır. Bu bütçeye uygunsanız sizinle iletişime geçmek isteriz, sizin de teklifinizi bekliyoruz.`;
-  } else {
-    msg += ` Sizinle iletişime geçmek isteriz, teklifinizi bekliyoruz.`;
-  }
-  if (district) msg += ` İlçe: ${district}.`;
-  if (date) msg += ` Düğün tarihim: ${date}.`;
-  if (name) msg += ` Adım: ${name}.`;
-  if (phone) msg += ` Telefon: ${phone}.`;
-  msg += ` Teşekkürler.`;
-  return encodeURIComponent(msg);
-}
-
-const SOCIAL_ICONS = [
-  { key: 'instagram', title: 'Instagram', svg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.21.6 1.76 1.15.5.5.9 1.1 1.15 1.76.25.64.42 1.37.47 2.43.05 1.06.06 1.42.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43-.26.66-.6 1.21-1.15 1.76-.5.5-1.1.9-1.76 1.15-.64.25-1.37.42-2.43.47-1.06.05-1.42.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47-.66-.26-1.21-.6-1.76-1.15-.5-.5-.9-1.1-1.15-1.76-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.7 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.21 1.15-1.76.5-.5 1.1-.9 1.76-1.15.64-.25 1.37-.42 2.43-.47C8.94 2.01 9.3 2 12 2zm0 1.8c-2.65 0-2.99.01-4.04.06-.9.04-1.4.19-1.72.32-.43.17-.74.37-1.06.7-.32.32-.52.63-.7 1.06-.13.32-.28.82-.32 1.72C4.11 9.01 4.1 9.35 4.1 12s.01 2.99.06 4.04c.04.9.19 1.4.32 1.72.17.43.37.74.7 1.06.32.32.63.52 1.06.7.32.13.82.28 1.72.32 1.05.05 1.39.06 4.04.06s2.99-.01 4.04-.06c.9-.04 1.4-.19 1.72-.32.43-.17.74-.37 1.06-.7.32-.32.52-.63.7-1.06.13-.32.28-.82.32-1.72.05-1.05.06-1.39.06-4.04s-.01-2.99-.06-4.04c-.04-.9-.19-1.4-.32-1.72-.17-.43-.37-.74-.7-1.06-.32-.32-.63-.52-1.06-.7-.32-.13-.82-.28-1.72-.32C14.99 3.81 14.65 3.8 12 3.8zm0 3.05a5.15 5.15 0 1 1 0 10.3 5.15 5.15 0 0 1 0-10.3zm0 1.8a3.35 3.35 0 1 0 0 6.7 3.35 3.35 0 0 0 0-6.7zm5.35-1.98a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>` },
-  { key: 'youtube', title: 'YouTube', svg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.51 3.5 12 3.5 12 3.5s-7.51 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14C4.49 20.5 12 20.5 12 20.5s7.51 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.6 15.6V8.4l6.4 3.6-6.4 3.6z"/></svg>` },
-  { key: 'website', title: 'Web Sitesi', svg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm7.93 9h-3.4a15.6 15.6 0 0 0-1.3-5.7A8.03 8.03 0 0 1 19.93 11zM12 4.06c.9 1.16 1.95 3.1 2.4 6.94H9.6c.45-3.84 1.5-5.78 2.4-6.94zM9.6 13h4.8c-.45 3.84-1.5 5.78-2.4 6.94-.9-1.16-1.95-3.1-2.4-6.94zm-1.83-2H4.07a8.03 8.03 0 0 1 4.7-5.7A15.6 15.6 0 0 0 7.47 11zm0 2a15.6 15.6 0 0 0 1.3 5.7A8.03 8.03 0 0 1 4.07 13h3.4zm9.06 5.7a15.6 15.6 0 0 0 1.3-5.7h3.4a8.03 8.03 0 0 1-4.7 5.7z"/></svg>` }
-];
-
-// ---------------------------------------------------------------------------
-// Ara
-// ---------------------------------------------------------------------------
-searchBtn.addEventListener('click', () => {
-  const districtName = document.getElementById('district').value;
-  const date = formatDate(document.getElementById('weddingDate').value);
-  const name = document.getElementById('fullName').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-
-  if (selectedCats.size === 0) {
-    alert("Lütfen yukarıdan en az bir hizmet arayıp seçin.");
-    return;
-  }
-  if (!districtName) {
-    alert("Lütfen ilçenizi seçin — size en yakın firmaları bulabilmemiz için gerekli.");
-    return;
-  }
-
-  const userCoord = DISTRICT_COORDS[districtName];
-  resultsList.innerHTML = "";
-
-  selectedCats.forEach(cat => {
-    let matches = FIRMS.filter(f => f.categories.includes(cat));
-    matches = matches.map(f => {
-      const fCoord = DISTRICT_COORDS[f.district] || userCoord;
-      return { ...f, dist: distanceKm(userCoord, fCoord) };
-    }).sort((a, b) => a.dist - b.dist).slice(0, 3);
-
-    const group = document.createElement('div');
-    group.className = 'cat-group';
-
-    const title = document.createElement('h3');
-    title.className = 'cat-group-title';
-    title.textContent = matches.length > 0
-      ? `${CAT_LABELS[cat] || cat} — Size En Yakın ${matches.length} Firma`
-      : `${CAT_LABELS[cat] || cat} — Henüz Firma Yok`;
-    group.appendChild(title);
-
-    const enteredBudget = getBudgetValue(cat);
-    if (enteredBudget) {
-      const budgetLine = document.createElement('p');
-      budgetLine.className = 'cat-group-budget';
-      budgetLine.textContent = `Bütçeniz: ${enteredBudget}`;
-      group.appendChild(budgetLine);
-    }
-
-    if (matches.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty-state';
-      empty.textContent = "Bu kategoride sistemde henüz üye firma yok, yakında eklenecek.";
-      group.appendChild(empty);
-    } else {
-      matches.forEach(firm => {
-        const waMsg = buildMessage(name, phone, cat, districtName, date);
-
-        const socialLinks = SOCIAL_ICONS.map(s => {
-          if (firm[s.key]) {
-            return `<a class="social-btn" href="${firm[s.key]}" target="_blank" title="${s.title}">${s.svg}</a>`;
-          }
-          return `<span class="social-btn social-btn-disabled" title="${s.title} bağlantısı yok">${s.svg}</span>`;
-        }).join('');
-
-        const priceListHtml = (firm.priceList && firm.priceList.length > 0)
-          ? `<div class="firm-pricelist">${firm.priceList.map(p => `<div class="price-row"><span>${p.item}</span><span>${p.price}</span></div>`).join('')}</div>`
-          : '';
-
-        const card = document.createElement('div');
-        card.className = 'firm-card';
-        card.innerHTML = `
-          <div class="firm-info">
-            <p class="firm-name">${firm.name}</p>
-            <p class="firm-meta">${firm.district} · ${firm.dist.toFixed(1)} km</p>
-            <div class="firm-social">${socialLinks}</div>
-            ${priceListHtml}
-          </div>
-          <a class="firm-whatsapp" href="https://wa.me/${firm.whatsapp}?text=${waMsg}" target="_blank">WhatsApp'tan Ulaş</a>
-        `;
-        group.appendChild(card);
-      });
-    }
-
-    resultsList.appendChild(group);
-  });
-
-  resultsSection.style.display = 'block';
-  resultsSection.scrollIntoView({ behavior: 'smooth' });
-});
+/* dilekçe */
+if(pg==="dilekce"){
+ var ids=["memurluk","gelin","damat","adres","tel","tarih","ek"];
+ function up(){
+  function v(i,d){var x=$("#"+i).value.trim();return x||d}
+  var t=$("#tarih").value;var ts=t?new Date(t+"T00:00:00").toLocaleDateString("tr-TR"):"……/……/………";
+  $("#o_mem").textContent=v("memurluk","……………………… Belediyesi")+" Evlendirme Memurluğu’na";
+  $("#o_gelin").textContent=v("gelin","……………………………");$("#o_damat").textContent=v("damat","……………………………");
+  $("#o_adres").textContent=v("adres","……………………………………");$("#o_tel").textContent=v("tel","……………………………");
+  $("#o_ek").textContent=v("ek","Evlenme başvuru belgeleri");$("#o_tarih").textContent=ts}
+ ids.forEach(function(i){$("#"+i).addEventListener("input",up)});up();
+ $("#yaz").addEventListener("click",function(){window.print()})}
+})();
