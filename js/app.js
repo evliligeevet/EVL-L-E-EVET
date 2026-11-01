@@ -22,16 +22,16 @@ function wk(w){var n=Math.abs(w);var t;if(w===0)return"Düğün günü";if(n>=8&
 /* yol haritası */
 var pg=document.body.getAttribute("data-page");
 function initYol(){
- var cur=(location.hash||"").replace("#","")||S.tab||"nikah";
- if(!window.LISTE.some(function(x){return x.id===cur}))cur="nikah";
+ var cur=decodeURIComponent((location.hash||"").replace("#",""))||S.tab||"nikah";
+ if(!window.LISTE.some(function(x){return String(x.id)===cur}))cur=String(window.LISTE[0].id);
  var tb=$("#tabs"),ls=$("#liste"),di=$("#tarih");
- window.LISTE.forEach(function(k){var b=document.createElement("button");b.className="tab";b.textContent=k.ad;b.dataset.id=k.id;b.addEventListener("click",function(){cur=k.id;S.tab=cur;sv(S);draw()});tb.appendChild(b)});
+ window.LISTE.forEach(function(k){var b=document.createElement("button");b.className="tab";b.textContent=k.ad;b.dataset.id=String(k.id);b.addEventListener("click",function(){cur=String(k.id);S.tab=cur;sv(S);draw()});tb.appendChild(b)});
  if(S.date)di.value=S.date;
  di.addEventListener("change",function(){S.date=di.value;sv(S);draw()});
  function tot(){var n=0,d=0;window.LISTE.forEach(function(k){k.ogeler.forEach(function(o){n++;if(S.done[o[0]])d++})});return[d,n]}
  function draw(){
   $$(".tab").forEach(function(b){b.classList.toggle("on",b.dataset.id===cur)});
-  var k=window.LISTE.filter(function(x){return x.id===cur})[0];ls.innerHTML="";
+  var k=window.LISTE.filter(function(x){return String(x.id)===cur})[0];ls.innerHTML="";
   k.ogeler.forEach(function(o){
    var d=!!S.done[o[0]],el=document.createElement("div");el.className="it"+(d?" d":"");
    var when=S.date?'<span class="chip g">'+wk(o[3])+'</span>':'';
@@ -60,6 +60,22 @@ function initYol(){
 }
 
 if(pg==="yol")window.listeYukle(initYol);
+
+
+/* ana sayfa kartları (panelden gelen kategorilerle aynı) */
+function initKart(){
+ var c=$("#kartlar");if(!c)return;c.innerHTML="";
+ var F=[["galeri-2.jpg","70% 30%"],["galeri-5.jpg","70% 40%"],["galeri-1.jpg","50% 60%"],["galeri-3.jpg","30% 50%"],["hero.jpg","30% 60%"],["galeri-4.jpg","50% 20%"]];
+ function kart(i,ad,rozet,alt,btn,href){
+  var a=document.createElement("a");a.className="kc";a.href=href;var f=F[i%F.length];
+  a.innerHTML='<div class="im"><em></em></div><div class="t"><h3></h3><span class="s2"></span><b></b></div>';
+  $(".im",a).style.backgroundImage="url(img/"+f[0]+")";$(".im",a).style.backgroundPosition=f[1];
+  $("em",a).textContent=rozet;$("h3",a).textContent=ad;$(".s2",a).textContent=alt;$("b",a).textContent=btn;c.appendChild(a)}
+ var n=0;
+ window.LISTE.forEach(function(k){kart(n++,k.ad,k.ogeler.length+" adım",k.ogeler.length+" adımda hazırlık","Listeyi aç","yol-haritasi.html#"+encodeURIComponent(k.id))});
+ kart(n++,"Güncelleme rehberi","Rehber","Evlendikten sonra kimlik, banka ve kurum işleri","Rehbere git","evlilik-sonrasi.html");
+ kart(n++,"Dijital davetiye","Ücretsiz","Dakikalar içinde, ücretsiz","Davetiye hazırla","davetiye.html")}
+if(pg==="ana")window.listeYukle(initKart);
 
 /* evlilik sonrası */
 function initSonra(){

@@ -9,6 +9,7 @@ function api(path,o){o=o||{};var h={apikey:KEY,"Content-Type":"application/json"
   if(!r.ok)return r.text().then(function(t){throw new Error("Hata: "+t.slice(0,160))});
   return r.status===204?null:r.text().then(function(t){return t?JSON.parse(t):null})})}
 if(!U||!KEY){$("gmsg").textContent="Supabase ayarı yok. js/config.js dosyasına proje adresi ve anahtarı yazın.";$("giris").disabled=true}
+$("goz").addEventListener("click",function(){var p=$("pw"),g=p.type==="password";p.type=g?"text":"password";this.textContent=g?"Gizle":"Göster"});
 $("giris").addEventListener("click",function(){
  $("gmsg").textContent="";
  fetch(U+"/auth/v1/token?grant_type=password",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email:$("em").value.trim(),password:$("pw").value})})
