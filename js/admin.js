@@ -32,7 +32,7 @@ function ciz(){
  var s=$("satir");s.innerHTML="";
  mad.filter(function(m){return m.kategori_id===cur}).forEach(function(m){
   var r=document.createElement("div");r.className="row"+(m.aktif?"":" off");
-  r.innerHTML='<div><label>Başlık</label><input class="b"></div><div'+(rh?' style="display:none"':'')+'><label>Hafta</label><input class="h" type="number"></div><div><label>Sıra</label><input class="o" type="number"></div><div class="w"><label>Açıklama</label><textarea class="a"></textarea></div><div class="acts"><label style="display:flex;gap:6px;align-items:center;margin:0"><input class="ak" type="checkbox" style="width:auto"> Sitede göster</label><button class="btn sm kay" type="button">Kaydet</button><button class="btn sm del sil" type="button">Sil</button></div>';
+  r.innerHTML='<div><label>Başlık</label><input class="b"></div><div'+(rh?' style="display:none"':'')+'><label>Düğünden kaç hafta önce?</label><input class="h" type="number"></div><div><label>Listedeki sırası</label><input class="o" type="number"></div><div class="w"><label>Açıklama</label><textarea class="a"></textarea></div><div class="acts"><label style="display:flex;gap:6px;align-items:center;margin:0"><input class="ak" type="checkbox" style="width:auto"> Sitede göster</label><button class="btn sm kay" type="button">Kaydet</button><button class="btn sm del sil" type="button">Sil</button></div>';
   r.querySelector(".b").value=m.baslik;r.querySelector(".h").value=m.hafta==null?"":m.hafta;r.querySelector(".o").value=m.sira;r.querySelector(".a").value=m.aciklama||"";r.querySelector(".ak").checked=!!m.aktif;
   r.querySelector(".kay").addEventListener("click",function(){
    var h=r.querySelector(".h").value;
@@ -78,20 +78,22 @@ function bugunS(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth(
 function farkG(s){var a=new Date();a.setHours(0,0,0,0);return Math.round((new Date(s+"T00:00:00")-a)/864e5)}
 function veri(){return Promise.all([api("/rest/v1/ee_profil?select=*&order=created_at.desc"),api("/rest/v1/ee_siparis?select=*&order=created_at.desc")]).then(function(r){CH={p:r[0]||[],s:r[1]||[]};return CH})}
 function odenenler(){return CH.s.filter(function(x){return x.durum==="odendi"})}
+function ciroGrafik(s,od){
+  var b2=el("div","box");b2.appendChild(el("h3",null,"Aylık ciro (son 12 ay)"));b2.lastChild.style.fontSize="20px";
+  var ay=[],mx=1,n=new Date();for(var i=11;i>=0;i--){var d=new Date(n.getFullYear(),n.getMonth()-i,1);var k=ym(d),t=0;od.forEach(function(x){if(ym(new Date(x.islem_tarihi||x.created_at))===k)t+=Number(x.tutar||0)});ay.push([d.toLocaleDateString("tr-TR",{month:"short"}),t]);if(t>mx)mx=t}
+  var br=el("div","bars");ay.forEach(function(a){var c=el("div");c.appendChild(el("span",null,a[1]?String(a[1]):""));var i=el("i");i.style.height=Math.round(a[1]*100/mx)+"%";i.title=a[0]+": "+tl(a[1]);c.appendChild(i);c.appendChild(el("span",null,a[0]));br.appendChild(c)});b2.appendChild(br);s.appendChild(b2);}
 function ozet(){var s=secs.oz;s.innerHTML="Yükleniyor...";
  veri().then(function(){s.innerHTML="";var P=CH.p,S=CH.s,od=odenenler(),bu=ym(new Date()),top=0,buay=0;
   od.forEach(function(x){var t=Number(x.tutar||0);top+=t;if(ym(new Date(x.islem_tarihi||x.created_at))===bu)buay+=t});
   var bek=S.filter(function(x){return x.durum==="beklemede"}),bekT=bek.reduce(function(a,x){return a+Number(x.tutar||0)},0);
   var aktif=P.filter(proMu),yakin=aktif.filter(function(p){return farkG(p.pro_bitis)<=30}).sort(function(a,b){return a.pro_bitis<b.pro_bitis?-1:1});
   var yeni=P.filter(function(p){return ym(new Date(p.created_at))===bu}).length;
-  var bx=el("div","box");bx.appendChild(el("h3",null,"Özet"));bx.lastChild.style.fontSize="22px";
+  var bx=el("div","box");bx.appendChild(el("h3",null,"Genel bakış"));bx.lastChild.style.fontSize="22px";
   var kp=el("div","kpi");
-  [["Toplam üye",P.length],["Aktif Pro",aktif.length],["Bu ay yeni üye",yeni],["Bu ay ciro",tl(buay)],["Toplam ciro",tl(top)],["Bekleyen ödeme",bek.length+" · "+tl(bekT)],["30 gün içinde biten Pro",yakin.length]].forEach(function(k){var d=el("div");d.appendChild(el("small",null,k[0]));d.appendChild(el("b",null,String(k[1])));kp.appendChild(d)});
+  [["Toplam üye",P.length],["Aktif Pro",aktif.length],["Bu ay yeni üye",yeni],["Bu ay ciro",tl(buay)],["Bekleyen ödeme",bek.length+" · "+tl(bekT)],["30 gün içinde biten Pro",yakin.length]].forEach(function(k){var d=el("div");d.appendChild(el("small",null,k[0]));d.appendChild(el("b",null,String(k[1])));kp.appendChild(d)});
   bx.appendChild(kp);
-  bx.appendChild(el("p",null,"Ödemeler, “Ödeme geldi” dediğiniz günün ayına yazılır. Güncel Pro fiyatı Ödeme ayarlarındadır; fiyatı değiştirdiğinizde eski siparişler eski tutarıyla kalır, yalnızca yeni siparişler yeni fiyatı alır."));bx.lastChild.style.cssText="font-size:13.5px;color:var(--mut)";s.appendChild(bx);
-  var b2=el("div","box");b2.appendChild(el("h3",null,"Aylık ciro (son 12 ay)"));b2.lastChild.style.fontSize="20px";
-  var ay=[],mx=1,n=new Date();for(var i=11;i>=0;i--){var d=new Date(n.getFullYear(),n.getMonth()-i,1);var k=ym(d),t=0;od.forEach(function(x){if(ym(new Date(x.islem_tarihi||x.created_at))===k)t+=Number(x.tutar||0)});ay.push([d.toLocaleDateString("tr-TR",{month:"short"}),t]);if(t>mx)mx=t}
-  var br=el("div","bars");ay.forEach(function(a){var c=el("div");c.appendChild(el("span",null,a[1]?String(a[1]):""));var i=el("i");i.style.height=Math.round(a[1]*100/mx)+"%";i.title=a[0]+": "+tl(a[1]);c.appendChild(i);c.appendChild(el("span",null,a[0]));br.appendChild(c)});b2.appendChild(br);s.appendChild(b2);
+  s.appendChild(bx);
+
   var b3=el("div","box");b3.appendChild(el("h3",null,"Üyeliği yakında bitenler (30 gün)"));b3.lastChild.style.fontSize="20px";
   if(!yakin.length)b3.appendChild(el("p",null,"Yakın zamanda bitecek Pro üyelik yok."));
   yakin.forEach(function(p){var r=el("div",null,p.email+" · "+td(p.pro_bitis)+" ("+farkG(p.pro_bitis)+" gün kaldı)");r.style.cssText="padding:7px 0;border-top:1px solid var(--line);font-size:15px";b3.appendChild(r)});s.appendChild(b3);
@@ -134,31 +136,54 @@ function uyeler(){var s=secs.uye;s.innerHTML="Yükleniyor...";
     var ac=el("div");ac.style.cssText="display:flex;gap:8px;flex-wrap:wrap;align-items:center";
     var b1=el("button","btn sm","+1 yıl Pro ver");b1.type="button";b1.addEventListener("click",function(){if(!confirm(p.email+" için 1 yıl Pro açılsın mı?"))return;rpc("ee_pro_ver",{p_email:p.email,p_yil:1}).then(function(){say("Pro açıldı ✓");uyeler()}).catch(function(e){say(e.message,1)})});ac.appendChild(b1);
     if(proMu(p)){var b2=el("button","btn sm del","Pro kaldır");b2.type="button";b2.addEventListener("click",function(){if(!confirm("Pro kaldırılsın mı?"))return;rpc("ee_pro_ver",{p_email:p.email,p_yil:0}).then(function(){say("Pro kaldırıldı.");uyeler()}).catch(function(e){say(e.message,1)})});ac.appendChild(b2)}
-    r.appendChild(ac);lst.appendChild(r)});
+    var b3=el("button","btn sm o","Hatırlatıcıları gör");b3.type="button";ac.appendChild(b3);r.appendChild(ac);
+    var dt=el("div");dt.style.cssText="grid-column:1/-1;display:none;border-top:1px solid var(--line);padding-top:10px;font-size:14.5px";r.appendChild(dt);var ac2=false;
+    b3.addEventListener("click",function(){if(ac2){ac2=false;dt.style.display="none";b3.textContent="Hatırlatıcıları gör";return}
+     ac2=true;dt.style.display="block";b3.textContent="Gizle";dt.textContent="Yükleniyor...";
+     rpc("ee_admin_ajanda",{p_user:p.id}).then(function(L){dt.innerHTML="";L=L||[];
+      if(!L.length){dt.textContent=proMu(p)?"Bu üye henüz hatırlatıcı eklememiş.":"Ücretsiz üye, ajanda kullanamaz.";return}
+      var n=L.filter(function(x){return!x.tamam}).length;dt.appendChild(el("p",null,L.length+" kayıt, "+n+" tamamlanmamış. Not içerikleri gizlidir, yalnızca başlık ve tarih görünür.")).style.cssText="color:var(--mut);margin:0 0 6px";
+      L.forEach(function(x){var q=el("div",null,td(x.tarih)+(x.saat?" "+String(x.saat).slice(0,5):"")+" · "+x.baslik+" · "+(x.tamam?"tamamlandı":(x.hatirlat_acik===false?"hatırlatma kapalı":"hatırlatma açık")));q.style.cssText="padding:5px 0;border-top:1px solid var(--line)";dt.appendChild(q)})}).catch(function(e){dt.textContent="";say(e.message,1)})});
+    lst.appendChild(r)});
    if(!lst.children.length)lst.appendChild(el("p",null,"Üye bulunamadı."))}
   ara.addEventListener("input",ciz);ciz()}).catch(function(e){s.textContent="";say(e.message,1)})}
 function siparisler(){var s=secs.sip;s.innerHTML="Yükleniyor...";
- api("/rest/v1/ee_siparis?select=*&order=created_at.desc").then(function(a){a=a||[];s.innerHTML="";
-  var bk=a.filter(function(x){return x.durum==="beklemede"}).length;var bx=el("div","box");bx.appendChild(el("h3",null,"Siparişler"));bx.lastChild.style.fontSize="22px";bx.appendChild(el("p",null,a.length+" sipariş, "+bk+" ödeme bekliyor. Ödeme hesabınıza ulaşınca “Ödeme geldi” düğmesine basın, Pro otomatik açılır."));s.appendChild(bx);
-  if(!a.length)s.appendChild(el("p",null,"Henüz sipariş yok."));
-  a.forEach(function(x){var r=el("div","row");r.style.gridTemplateColumns="1fr auto";var sol=el("div");sol.appendChild(el("b",null,kod(x.id)+" · "+tl(x.tutar)));
-   sol.appendChild(el("div",null,(x.ad||"-")+" · "+x.eposta+(x.telefon?" · "+x.telefon:"")));sol.lastChild.style.fontSize="14px";
-   var d={beklemede:"Ödeme bekleniyor",odendi:"Ödendi",iptal:"İptal"}[x.durum];var dd=el("div",null,td(x.created_at)+" · "+d);dd.style.cssText="font-size:13px;color:"+(x.durum==="odendi"?"var(--ok)":x.durum==="iptal"?"#B3122B":"var(--deep)");sol.appendChild(dd);r.appendChild(sol);
-   if(x.durum==="beklemede"){var ac=el("div");ac.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-    var ok=el("button","btn sm","Ödeme geldi, Pro aç");ok.type="button";ok.addEventListener("click",function(){if(!confirm(x.eposta+" için ödeme geldi, 1 yıl Pro açılsın mı?"))return;rpc("ee_siparis_karar",{p_id:x.id,p_onay:true}).then(function(){say("Pro açıldı ✓");siparisler()}).catch(function(e){say(e.message,1)})});
-    var iv=el("button","btn sm del","İptal");iv.type="button";iv.addEventListener("click",function(){if(!confirm("Sipariş iptal edilsin mi?"))return;rpc("ee_siparis_karar",{p_id:x.id,p_onay:false}).then(function(){say("İptal edildi.");siparisler()}).catch(function(e){say(e.message,1)})});
-    ac.appendChild(ok);ac.appendChild(iv);r.appendChild(ac)}
-   s.appendChild(r)})}).catch(function(e){s.textContent="";say(e.message,1)})}
-var AYF=[["pro_fiyat","Pro yıllık fiyat (sadece rakam, TL)"],["banka_adi","Banka adı"],["hesap_sahibi","Hesap sahibi (ünvan)"],["iban","IBAN"],["odeme_notu","Ödeme notu (isteğe bağlı)"],["whatsapp","WhatsApp (905331509890 biçiminde)"],["sirket_adres","Şirket adresi (sözleşmede görünür)"],["sirket_vd","Vergi dairesi"],["sirket_vkn","Vergi kimlik no"],["kdv_notu","KDV notu"],["eposta_acik","E-posta hatırlatma (evet / hayir). E-posta kurulumu bitince evet yazın"]];
+ veri().then(function(){var a=CH.s;s.innerHTML="";
+  var od=odenenler(),bu=ym(new Date()),top=0,buay=0;od.forEach(function(x){var t=Number(x.tutar||0);top+=t;if(ym(new Date(x.islem_tarihi||x.created_at))===bu)buay+=t});
+  var bek=a.filter(function(x){return x.durum==="beklemede"}),bekT=bek.reduce(function(t,x){return t+Number(x.tutar||0)},0);
+  var bx=el("div","box");bx.appendChild(el("h3",null,"Ödemeler"));bx.lastChild.style.fontSize="22px";
+  var kp=el("div","kpi");[["Bekleyen ödeme",bek.length+" · "+tl(bekT)],["Bu ay gelen",tl(buay)],["Toplam gelen",tl(top)]].forEach(function(k){var d=el("div");d.appendChild(el("small",null,k[0]));d.appendChild(el("b",null,k[1]));kp.appendChild(d)});bx.appendChild(kp);
+  bx.appendChild(el("p",null,"Para hesabınıza ulaşınca “Ödeme geldi” düğmesine basın, üyenin Pro’su kendiliğinden açılır."));bx.lastChild.style.cssText="font-size:14px;color:var(--mut)";s.appendChild(bx);
+  ciroGrafik(s,od);
+  var fl=el("div","tabs");fl.style.margin="18px 0 10px";var mod="bek";
+  var lst=el("div");
+  function ciz(){lst.innerHTML="";Array.prototype.forEach.call(fl.children,function(b){b.classList.toggle("on",b.getAttribute("data-m")===mod)});
+   var L=a.filter(function(x){return mod==="hepsi"||x.durum==="beklemede"});
+   if(!L.length)lst.appendChild(el("p",null,mod==="hepsi"?"Henüz sipariş yok.":"Bekleyen ödeme yok."));
+   L.forEach(function(x){var r=el("div","row");r.style.gridTemplateColumns="1fr auto";var sol=el("div");sol.appendChild(el("b",null,kod(x.id)+" · "+tl(x.tutar)));
+    sol.appendChild(el("div",null,(x.ad||"-")+" · "+x.eposta+(x.telefon?" · "+x.telefon:"")));sol.lastChild.style.fontSize="14px";
+    var d={beklemede:"Ödeme bekleniyor",odendi:"Ödendi",iptal:"İptal"}[x.durum];var dd=el("div",null,td(x.created_at)+" · "+d);dd.style.cssText="font-size:13px;color:"+(x.durum==="odendi"?"var(--ok)":x.durum==="iptal"?"#B3122B":"var(--deep)");sol.appendChild(dd);r.appendChild(sol);
+    if(x.durum==="beklemede"){var ac=el("div");ac.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+     var ok=el("button","btn sm","Ödeme geldi, Pro aç");ok.type="button";ok.addEventListener("click",function(){if(!confirm(x.eposta+" için ödeme geldi, 1 yıl Pro açılsın mı?"))return;rpc("ee_siparis_karar",{p_id:x.id,p_onay:true}).then(function(){say("Pro açıldı ✓");siparisler()}).catch(function(e){say(e.message,1)})});
+     var iv=el("button","btn sm del","İptal");iv.type="button";iv.addEventListener("click",function(){if(!confirm("Sipariş iptal edilsin mi?"))return;rpc("ee_siparis_karar",{p_id:x.id,p_onay:false}).then(function(){say("İptal edildi.");siparisler()}).catch(function(e){say(e.message,1)})});
+     ac.appendChild(ok);ac.appendChild(iv);r.appendChild(ac)}
+    lst.appendChild(r)})}
+  [["bek","Bekleyenler"],["hepsi","Tüm siparişler"]].forEach(function(m){var b=el("button","tab",m[1]);b.type="button";b.setAttribute("data-m",m[0]);b.addEventListener("click",function(){mod=m[0];ciz()});fl.appendChild(b)});
+  s.appendChild(fl);s.appendChild(lst);ciz()}).catch(function(e){s.textContent="";say(e.message,1)})}
+var AYG=[["Pro fiyatı","Yeni siparişlere uygulanır. Eski siparişler eski tutarıyla kalır.",[["pro_fiyat","Pro yıllık fiyat (sadece rakam, TL)"]]],
+ ["Ödeme bilgileri","Müşteri sepette bunları görür ve havale yapar. IBAN boşsa “WhatsApp’tan yazın” çıkar.",[["banka_adi","Banka adı"],["hesap_sahibi","Hesap sahibi (ünvan)"],["iban","IBAN"],["odeme_notu","Ödeme notu (isteğe bağlı)"],["whatsapp","WhatsApp (905331509890 biçiminde)"]]],
+ ["Şirket bilgileri","Satış sözleşmesinde görünür.",[["sirket_adres","Şirket adresi"],["sirket_vd","Vergi dairesi"],["sirket_vkn","Vergi kimlik no"],["kdv_notu","KDV notu"]]],
+ ["Gelişmiş","E-posta hatırlatması kurulana kadar dokunmayın.",[["eposta_acik","E-posta hatırlatma (evet / hayir)"]]]];
+var AYF=[];AYG.forEach(function(g){g[2].forEach(function(f){AYF.push(f)})});
 function ayarlar(){var s=secs.ay;s.innerHTML="Yükleniyor...";
- api("/rest/v1/ee_ayar?select=*").then(function(a){ayD={};(a||[]).forEach(function(x){ayD[x.anahtar]=x.deger});s.innerHTML="";
-  var bx=el("div","box");bx.appendChild(el("h3",null,"Ödeme ayarları"));bx.lastChild.style.fontSize="22px";
-  bx.appendChild(el("p",null,"Fiyatı değiştirirseniz eski siparişler eski tutarıyla kalır; yeni fiyat yalnızca yeni siparişlere uygulanır. Müşteri sepette bu bilgileri görür ve havale yapar. IBAN boş bırakılırsa “WhatsApp’tan yazın” çıkar."));
-  var fm=el("div","fm");fm.style.marginTop="14px";var inp={};
-  AYF.forEach(function(f){var d=el("div","f"+(f[0]==="hesap_sahibi"||f[0]==="sirket_adres"||f[0]==="odeme_notu"?" w":""));var l=el("label",null,f[1]);var i=el("input");i.value=ayD[f[0]]||"";d.appendChild(l);d.appendChild(i);fm.appendChild(d);inp[f[0]]=i});
-  bx.appendChild(fm);var kb=el("button","btn","Kaydet");kb.type="button";kb.style.marginTop="16px";bx.appendChild(kb);
+ api("/rest/v1/ee_ayar?select=*").then(function(a){ayD={};(a||[]).forEach(function(x){ayD[x.anahtar]=x.deger});s.innerHTML="";var inp={};
+  AYG.forEach(function(g){var bx=el("div","box");bx.appendChild(el("h3",null,g[0]));bx.lastChild.style.fontSize="20px";
+   var n=el("p",null,g[1]);n.style.cssText="font-size:14px;color:var(--mut);margin:4px 0 12px";bx.appendChild(n);
+   var fm=el("div","fm");
+   g[2].forEach(function(f){var d=el("div","f"+(f[0]==="hesap_sahibi"||f[0]==="sirket_adres"||f[0]==="odeme_notu"?" w":""));var l=el("label",null,f[1]);var i=el("input");i.value=ayD[f[0]]||"";d.appendChild(l);d.appendChild(i);fm.appendChild(d);inp[f[0]]=i});
+   bx.appendChild(fm);s.appendChild(bx)});
+  var kb=el("button","btn","Tüm ayarları kaydet");kb.type="button";s.appendChild(kb);
   kb.addEventListener("click",function(){var f=inp.pro_fiyat.value.replace(/[^\d]/g,"");if(!f){say("Fiyat yazın.",1);return}inp.pro_fiyat.value=f;
    var rows=AYF.map(function(x){return{anahtar:x[0],deger:inp[x[0]].value.trim()}});
-   api("/rest/v1/ee_ayar?on_conflict=anahtar",{method:"POST",body:rows,prefer:"resolution=merge-duplicates,return=minimal"}).then(function(){say("Kaydedildi ✓");flash(kb)}).catch(function(e){say(e.message,1)})});
-  s.appendChild(bx)}).catch(function(e){s.textContent="";say(e.message,1)})}
+   api("/rest/v1/ee_ayar?on_conflict=anahtar",{method:"POST",body:rows,prefer:"resolution=merge-duplicates,return=minimal"}).then(function(){say("Kaydedildi ✓");flash(kb)}).catch(function(e){say(e.message,1)})})}).catch(function(e){s.textContent="";say(e.message,1)})}
 })();

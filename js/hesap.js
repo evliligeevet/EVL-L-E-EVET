@@ -22,7 +22,7 @@ function ilkAd(){var a=(PR&&PR.ad)||o.user.ad||"";return a.split(" ")[0]||"Merha
 function hata(e){E.toast(e.message||"Hata oluştu",1)}
 
 function kilit(k){k.innerHTML="";var b=el("div","kutu");b.appendChild(el("h2",null,"Ajanda ve hatırlatma asistanı, Pro üyelere özel"));
- b.appendChild(el("p","not2","Düğün hazırlıklarını saatli bir takvimde tut. Asistan düğününe kaç gün kaldığını ve bu hafta neler yapman gerektiğini söyler. Yalnızca sen görürsün."));
+ b.appendChild(el("p","not2","Düğün hazırlıklarını saatli bir takvimde tut. Asistan düğününe kaç gün kaldığını ve bu hafta neler yapman gerektiğini söyler. Not içeriklerini yalnızca sen görürsün."));
  var ul=el("ul","lst");["Saatli takvim: hangi gün, saat kaçta ne var bir bakışta","Kendi notların ve randevuların, her birine hatırlatma anahtarı","Yol haritasındaki işler düğün tarihine göre takvimine otomatik dizilir","Hatırlatmaları telefonunun takvimine tek dokunuşla aktar","“Düğününe 30 gün kaldı” gibi kişiye özel asistan mesajları","1 yıl geçerli, bir kez öde"].forEach(function(t){ul.appendChild(el("li",null,t))});b.appendChild(ul);
  var a=el("a","btn","Pro’yu sepete ekle");a.href="sepet.html";b.appendChild(a);k.appendChild(b)}
 
