@@ -98,14 +98,16 @@ if(pg==="sonra")window.listeYukle(initSonra);
 
 /* dilekçe */
 if(pg==="dilekce"){
- var ids=["memurluk","gelin","damat","adres","tel","tarih","ek"];
+ var ids=["memurluk","gelin","damat","gtc","dtc","adres","tel","tarih","ek"];
  function up(){
   function v(i,d){var x=$("#"+i).value.trim();return x||d}
   var t=$("#tarih").value;var ts=t?new Date(t+"T00:00:00").toLocaleDateString("tr-TR"):"……/……/………";
   $("#o_mem").textContent=v("memurluk","……………………… Belediyesi")+" Evlendirme Memurluğu’na";
   $("#o_gelin").textContent=v("gelin","……………………………");$("#o_damat").textContent=v("damat","……………………………");
+  $("#o_gtc").textContent=v("gtc","………………………");$("#o_dtc").textContent=v("dtc","………………………");
   $("#o_adres").textContent=v("adres","……………………………………");$("#o_tel").textContent=v("tel","……………………………");
   $("#o_ek").textContent=v("ek","Evlenme başvuru belgeleri");$("#o_tarih").textContent=ts}
+ ["gtc","dtc"].forEach(function(i){var e=$("#"+i);e.addEventListener("input",function(){var n=e.value.replace(/\D/g,"").slice(0,11);if(n!==e.value)e.value=n;e.style.borderColor=n.length&&n.length!==11?"#b3122b":"";$("#tcn").textContent=(n.length&&n.length!==11)?"T.C. kimlik numarası 11 haneli olmalı.":"Kimlik numaraları yalnızca bu sayfada, tarayıcında kalır. Sunucuya gönderilmez ve hiçbir yere kaydedilmez. Yazdırdıktan sonra sayfayı kapat."})});
  ids.forEach(function(i){$("#"+i).addEventListener("input",up)});up();
  $("#yaz").addEventListener("click",function(){window.print()})}
 })();

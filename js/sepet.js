@@ -13,7 +13,7 @@ Promise.all([E.ayar(),oturum?E.profil().catch(function(){return null}):Promise.r
   b.appendChild(E.odemeKutu(ay,bek));var h=el("a","btn sm","Hesabıma git");h.href="hesabim.html";h.style.marginTop="14px";b.appendChild(h);k.appendChild(b);return}
  var s=el("div","kutu");s.appendChild(el("h2",null,"Sepetim"));
  var row=el("div","spr");var sol=el("div");sol.appendChild(el("b",null,"Evliliğe Evet Pro, 1 yıllık üyelik"));
- sol.appendChild(el("p","not2","Kişisel ajanda ve notlar, hatırlatma tarihleri, takvime aktarma. Satın alma tarihinden itibaren 1 yıl geçerlidir."));
+ sol.appendChild(el("p","not2","Saatli takvim, kişisel notlar ve hatırlatmalar, düğün tarihine göre otomatik yol haritası, telefon takvimine aktarma. Satın alma tarihinden itibaren 1 yıl geçerlidir."));
  row.appendChild(sol);row.appendChild(el("div","fy",E.tl(fiyat)));s.appendChild(row);
  var tp=el("div","spt");tp.appendChild(el("span",null,"Toplam"));tp.appendChild(el("b",null,E.tl(fiyat)));s.appendChild(tp);
  s.appendChild(el("p","not2",ay.kdv_notu||"Fiyata KDV dahildir."));

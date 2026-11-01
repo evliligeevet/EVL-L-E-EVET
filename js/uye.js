@@ -11,6 +11,11 @@ function msg(t){var m=t;try{var j=JSON.parse(t);m=j.message||j.msg||j.error_desc
  if(/duplicate key|ee_siparis_tek_bekleyen/i.test(m))return"Zaten ödeme bekleyen bir siparişin var.";
  if(/row-level security|42501/i.test(m))return"Bu işlem için aktif Pro üyelik gerekir.";
  return"Hata: "+m.slice(0,160)}
+
+/* görünür geri bildirim: ekranın altında kısa bildirim + düğme durumu */
+E.toast=function(t,hata){var x=document.getElementById("ee_toast");if(!x){x=document.createElement("div");x.id="ee_toast";x.className="toast";x.setAttribute("role","status");x.setAttribute("aria-live","polite");document.body.appendChild(x)}
+ x.textContent=t;x.classList.toggle("err",!!hata);x.classList.add("on");clearTimeout(x._t);x._t=setTimeout(function(){x.classList.remove("on")},hata?4200:2400)};
+E.ok2=function(b,t){if(!b)return;var o=b._ot||b.textContent;b._ot=o;b.textContent=t||"Kaydedildi ✓";b.classList.add("ok");b.disabled=false;clearTimeout(b._t);b._t=setTimeout(function(){b.textContent=o;b.classList.remove("ok")},2000)};
 E.ok=!!(U&&KEY);
 E.oturum=ld;
 E.tl=function(n){return Number(n||0).toLocaleString("tr-TR")+" ₺"};
