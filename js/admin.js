@@ -5,9 +5,14 @@ function toast(t,e){var x=$("toast");if(!x){x=document.createElement("div");x.id
  x.textContent=t;x.classList.toggle("err",!!e);x.classList.add("on");clearTimeout(x._t);x._t=setTimeout(function(){x.classList.remove("on")},e?4200:2400)}
 function flash(b,t){if(!b)return;var o=b._ot||b.textContent;b._ot=o;b.textContent=t||"Kaydedildi ✓";b.classList.add("ok");clearTimeout(b._t);b._t=setTimeout(function(){b.textContent=o;b.classList.remove("ok")},2000)}
 function say(t,e){var m=$("msg");m.textContent=t||"";m.className="msg"+(e?" err":"");if(t)toast(t,e)}
-function api(path,o){o=o||{};var h={apikey:KEY,"Content-Type":"application/json"};if(tok)h.Authorization="Bearer "+tok;else if(/^eyJ/.test(KEY))h.Authorization="Bearer "+KEY;
+var SK="ee_admin_oturum",ex=0,rt=null;
+function sakla(j){tok=j.access_token;rt=j.refresh_token||rt;ex=Date.now()+((j.expires_in||3600)-60)*1000;try{localStorage.setItem(SK,JSON.stringify({a:tok,r:rt,e:ex}))}catch(e){}}
+function unut(){tok=null;rt=null;ex=0;try{localStorage.removeItem(SK)}catch(e){}}
+function taze(){if(!tok||Date.now()<ex||!rt)return Promise.resolve();
+ return fetch(U+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:rt})}).then(function(r){return r.json()}).then(function(j){if(j&&j.access_token)sakla(j);else unut()}).catch(function(){})}
+function api(path,o){o=o||{};return taze().then(function(){var h={apikey:KEY,"Content-Type":"application/json"};if(tok)h.Authorization="Bearer "+tok;else if(/^eyJ/.test(KEY))h.Authorization="Bearer "+KEY;
  if(o.prefer)h.Prefer=o.prefer;
- return fetch(U+path,{method:o.method||"GET",headers:h,body:o.body?JSON.stringify(o.body):undefined}).then(function(r){
+ return fetch(U+path,{method:o.method||"GET",headers:h,body:o.body?JSON.stringify(o.body):undefined})}).then(function(r){
   if(r.status===401||r.status===403){throw new Error("Oturum süresi doldu ya da yetkiniz yok. Çıkıp tekrar giriş yapın.")}
   if(!r.ok)return r.text().then(function(t){throw new Error("Hata: "+t.slice(0,160))});
   return r.status===204?null:r.text().then(function(t){return t?JSON.parse(t):null})})}
@@ -18,9 +23,9 @@ $("giris").addEventListener("click",function(){
  fetch(U+"/auth/v1/token?grant_type=password",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({email:$("em").value.trim(),password:$("pw").value})})
  .then(function(r){return r.json().then(function(j){return[r.ok,j]})}).then(function(x){
   if(!x[0]||!x[1].access_token){$("gmsg").textContent="Giriş başarısız. E-posta ya da şifre hatalı.";return}
-  tok=x[1].access_token;$("pw").value="";$("girisK").style.display="none";$("panelK").style.display="block";yukle();bolum("oz")
+  sakla(x[1]);$("pw").value="";$("girisK").style.display="none";$("panelK").style.display="block";yukle();bolum("oz")
  }).catch(function(){$("gmsg").textContent="Sunucuya ulaşılamadı."})});
-$("cikis").addEventListener("click",function(){tok=null;CH=null;kat=[];mad=[];$("panelK").style.display="none";$("girisK").style.display="block"});
+$("cikis").addEventListener("click",function(){unut();CH=null;kat=[];mad=[];$("panelK").style.display="none";$("girisK").style.display="block"});
 function yukle(){
  return Promise.all([api("/rest/v1/ee_kategori?select=*&order=sira"),api("/rest/v1/ee_madde?select=*&order=sira")]).then(function(r){
   kat=r[0]||[];mad=r[1]||[];if(!cur||!kat.some(function(k){return k.id===cur}))cur=kat.length?kat[0].id:null;ciz()}).catch(function(e){say(e.message,1)})}
@@ -186,4 +191,8 @@ function ayarlar(){var s=secs.ay;s.innerHTML="Yükleniyor...";
   kb.addEventListener("click",function(){var f=inp.pro_fiyat.value.replace(/[^\d]/g,"");if(!f){say("Fiyat yazın.",1);return}inp.pro_fiyat.value=f;
    var rows=AYF.map(function(x){return{anahtar:x[0],deger:inp[x[0]].value.trim()}});
    api("/rest/v1/ee_ayar?on_conflict=anahtar",{method:"POST",body:rows,prefer:"resolution=merge-duplicates,return=minimal"}).then(function(){say("Kaydedildi ✓");flash(kb)}).catch(function(e){say(e.message,1)})})}).catch(function(e){s.textContent="";say(e.message,1)})}
+/* sayfa yenilenince oturumu geri aç */
+(function(){var k=null;try{k=JSON.parse(localStorage.getItem(SK))}catch(e){}
+ if(!k||!k.a||!k.r)return;tok=k.a;rt=k.r;ex=k.e||0;
+ api("/rest/v1/ee_ayar?select=anahtar&limit=1").then(function(){$("girisK").style.display="none";$("panelK").style.display="block";yukle();bolum("oz")}).catch(function(){unut()})})();
 })();
