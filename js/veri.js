@@ -3,7 +3,8 @@ window.listeYukle=function(cb){
  var bitti=false;function fin(){if(bitti)return;bitti=true;cb()}
  var A=window.AYAR||{};
  if(!A.SUPABASE_URL||!A.SUPABASE_KEY){fin();return}
- var h={apikey:A.SUPABASE_KEY,Authorization:"Bearer "+A.SUPABASE_KEY},u=A.SUPABASE_URL.replace(/\/$/,"");
+ var h={apikey:A.SUPABASE_KEY},u=A.SUPABASE_URL.replace(/\/$/,"");
+ if(/^eyJ/.test(A.SUPABASE_KEY))h.Authorization="Bearer "+A.SUPABASE_KEY;
  setTimeout(fin,4000);
  Promise.all([
   fetch(u+"/rest/v1/ee_kategori?select=*&order=sira",{headers:h}).then(function(r){return r.json()}),

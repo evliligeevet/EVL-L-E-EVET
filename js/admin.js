@@ -2,7 +2,7 @@
 var A=window.AYAR||{},U=(A.SUPABASE_URL||"").replace(/\/$/,""),KEY=A.SUPABASE_KEY||"";
 var $=function(i){return document.getElementById(i)},tok=null,kat=[],mad=[],cur=null;
 function say(t,e){var m=$("msg");m.textContent=t||"";m.className="msg"+(e?" err":"")}
-function api(path,o){o=o||{};var h={apikey:KEY,Authorization:"Bearer "+(tok||KEY),"Content-Type":"application/json"};
+function api(path,o){o=o||{};var h={apikey:KEY,"Content-Type":"application/json"};if(tok)h.Authorization="Bearer "+tok;else if(/^eyJ/.test(KEY))h.Authorization="Bearer "+KEY;
  if(o.prefer)h.Prefer=o.prefer;
  return fetch(U+path,{method:o.method||"GET",headers:h,body:o.body?JSON.stringify(o.body):undefined}).then(function(r){
   if(r.status===401||r.status===403){throw new Error("Oturum süresi doldu ya da yetkiniz yok. Çıkıp tekrar giriş yapın.")}
