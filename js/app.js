@@ -8,8 +8,15 @@ var $$=function(q,r){return Array.prototype.slice.call((r||document).querySelect
 var A=window.AYAR||{};
 
 /* menü */
-var bg=$(".burger"),nv=$("nav.m");
-if(bg){bg.addEventListener("click",function(){var o=nv.classList.toggle("open");bg.setAttribute("aria-expanded",o)})}
+var bg=$(".burger"),nv=$("nav.m"),ov=$(".ov");
+function mk(o){nv.classList.toggle("open",o);bg.setAttribute("aria-expanded",o);document.body.classList.toggle("mo",o);if(ov)ov.hidden=!o}
+if(bg){bg.addEventListener("click",function(){mk(!nv.classList.contains("open"))});
+ var kp=$(".kapat",nv);if(kp)kp.addEventListener("click",function(){mk(false)});
+ if(ov)ov.addEventListener("click",function(){mk(false)});
+ $$("a",nv).forEach(function(l){l.addEventListener("click",function(){mk(false)})});
+ document.addEventListener("keydown",function(e){if(e.key==="Escape")mk(false)})}
+$$(".yil").forEach(function(e){e.textContent=new Date().getFullYear()});
+$$("[data-sos]").forEach(function(e){var v=(A[e.getAttribute("data-sos")]||"").trim();if(!v)return;if(!/^https?:/.test(v)){var k=e.getAttribute("data-sos");v=(k==="INSTAGRAM"?"https://www.instagram.com/":k==="TIKTOK"?"https://www.tiktok.com/@":k==="FACEBOOK"?"https://www.facebook.com/":"https://www.youtube.com/@")+v.replace(/^@/,"")}e.href=v;e.hidden=false});
 $$("[data-fiyat]").forEach(function(e){e.textContent=A.PRO_FIYAT||""});
 $$("[data-ep]").forEach(function(e){if(!A.EPOSTA)e.style.display="none";else e.href="mailto:"+A.EPOSTA+"?subject="+encodeURIComponent("Evliliğe Evet Pro ön kayıt")});
 $$("[data-wa]").forEach(function(e){if(!A.WHATSAPP)e.style.display="none";else e.href="https://wa.me/"+A.WHATSAPP+"?text="+encodeURIComponent("Merhaba, Evliliğe Evet Pro için ön kayıt yaptırmak istiyorum.")});
