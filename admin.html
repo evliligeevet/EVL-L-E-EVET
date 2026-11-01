@@ -6,13 +6,13 @@
 <div class="f"><label for="pw">Şifre</label><div class="pw"><input id="pw" type="password" autocomplete="current-password"><button type="button" id="goz">Göster</button></div></div></div>
 <button class="btn" id="giris" type="button" style="margin-top:16px">Giriş yap</button><p class="msg err" id="gmsg" style="margin-top:10px"></p></div>
 <div id="panelK" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h1>Liste yönetimi</h1><button class="btn o sm" id="cikis" type="button">Çıkış</button></div>
-<p style="color:var(--mut);margin:8px 0 18px">Maddeleri buradan ekleyin, düzeltin ya da gizleyin. Kaydettiğiniz anda sitede görünür.</p>
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h1>Yönetim</h1><button class="btn o sm" id="cikis" type="button">Çıkış</button></div>
+<div class="tabs" id="ust" style="margin-top:14px"><button class="tab on" data-b="uye" type="button">Üyeler</button><button class="tab" data-b="sip" type="button">Siparişler</button><button class="tab" data-b="ay" type="button">Ödeme ayarları</button><button class="tab" data-b="liste" type="button">Liste yönetimi</button></div><div id="s_uye"></div><div id="s_sip" hidden></div><div id="s_ay" hidden></div><div id="s_liste" hidden><p style="color:var(--mut);margin:8px 0 18px">Maddeleri buradan ekleyin, düzeltin ya da gizleyin. Kaydettiğiniz anda sitede görünür. Yeni kategori eklerseniz ana sayfada kendiliğinden yeni kart olur.</p>
 <div class="tabs" id="kt"></div><p class="msg" id="msg"></p>
 <div class="box"><h3 style="font-size:22px;margin-bottom:10px">Yeni madde ekle</h3><div class="row" style="border:0;padding:0"><div><label>Başlık</label><input id="nb" placeholder="Örn: Gelin bukesini sipariş edin"></div><div id="nhw"><label>Hafta</label><input id="nh" type="number" value="-4"></div><div><label>Sıra</label><input id="ns" type="number" value="100"></div>
 <div class="w"><label>Açıklama</label><textarea id="na"></textarea></div><div class="acts"><button class="btn sm" id="ekle" type="button">Ekle</button><span style="font-size:13px;color:var(--mut)">Hafta: düğünden kaç hafta önce (eksi) ya da sonra (artı) önerilir. Örn: -4 = 4 hafta kala.</span></div></div></div>
 <div id="satir"></div>
 <div class="box"><h3 style="font-size:22px;margin-bottom:10px">Kategori işlemleri</h3><div class="row" style="border:0;padding:0;grid-template-columns:1fr 1fr 90px"><div><label>Yeni kategori adı</label><input id="kad" placeholder="Örn: Balayı"></div><div><label>Tür</label><select id="ktur"><option value="liste">Yol haritası listesi</option><option value="rehber">Evlilik sonrası rehber</option></select></div><div><label>Sıra</label><input id="ksira" type="number" value="50"></div>
 <div class="acts"><button class="btn sm" id="kekle" type="button">Kategori ekle</button><button class="btn sm del" id="ksil" type="button">Seçili kategoriyi sil</button></div></div></div>
-</div></div>
+</div></div></div>
 <script src="js/config.js"></script><script src="js/admin.js"></script></body></html>

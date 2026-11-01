@@ -191,3 +191,22 @@ footer .alt2{margin-top:14px;font-size:14px;color:var(--mut)}
 .sos a:hover{background:var(--red);color:#fff!important}
 .sos a[hidden]{display:none!important}
 @media(max-width:900px){header.top{backdrop-filter:none;-webkit-backdrop-filter:none}}
+/* üyelik, sepet, ajanda */
+.pw{display:flex;gap:8px}
+label.rz{display:flex;gap:8px;align-items:flex-start;font-size:15px;color:var(--mut);cursor:pointer;margin:6px 0}
+label.rz input{width:auto;margin-top:4px}
+.kutu{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 8px 24px rgba(35,26,38,.06)}
+.kutu h2{font-size:26px;margin-bottom:10px}
+.not2{color:var(--mut);font-size:15px;margin:8px 0;line-height:1.5}
+.lst{list-style:none;margin:12px 0 18px}.lst li{padding:5px 0 5px 28px;position:relative}.lst li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+.spr{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}
+.spr .fy{font-weight:650;font-size:20px;white-space:nowrap}
+.spt{display:flex;justify-content:space-between;padding:14px 0;border-top:2px solid var(--plum);font-size:20px}
+.odk{margin:14px 0;background:var(--ivory);border:1.5px dashed var(--red);border-radius:14px;padding:16px}
+.odT{width:100%;border-collapse:collapse;margin-bottom:8px}.odT td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:middle;word-break:break-word}.odT td.sol{color:var(--mut);width:36%}
+.del2{margin-left:8px;align-self:flex-start}
+.yas{max-width:820px;padding:30px;margin-bottom:70px}.yas h2{font-size:22px;margin:22px 0 8px}.yas p{margin-bottom:8px;color:#3a3d45}
+nav.m a.hes{margin-left:6px;border:1.5px solid var(--deep)!important;color:var(--deep)!important;padding:7px 16px;border-radius:99px}
+@media(min-width:901px){nav.m a.hes .ik,nav.m a.hes small{display:none}nav.m a.hes b{font-weight:600}body[data-page=ana] nav.m a.hes{border-color:#fff!important;color:#fff!important}}
+@media(max-width:900px){nav.m a.hes{margin:0;border:0!important;color:var(--ink)!important;padding:8px 12px;border-radius:14px}}
+.tab.ak{background:var(--red);color:#fff}
